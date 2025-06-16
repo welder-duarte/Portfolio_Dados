@@ -26,4 +26,4 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues, enviar p
 
 ## Contato
 - Email: welder228@hotmail.com
-- [LinkedIn](https://www.linkedin.com/in/welder-migliorini-duarte-dados-bi-perf/)
+- [LinkedIn](https://www.linkedin.com/in/welder-migliorini-duarte/)
