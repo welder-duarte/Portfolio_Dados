@@ -20,7 +20,7 @@ A partir de uma lista de cidades, buscamos as latitudes e longitudes na API do G
 
 ![Mapa1](https://github.com/welder-duarte/Portfolio_DataScience/assets/85957982/60ec8dae-ba8c-48ea-94ab-a004aa0fd571)
 
-Após a clusterização com K-means, dividindo as cidades em 4 clusters (pois serão 4 gerentes regionais) chegamos nesse resultado, com centróides gerados em preto. Adicionei também curcunferências com raios de 150 km para dar uma noção melhor da área de deslocamento em cada cluster:
+Após a clusterização com K-means, dividindo as cidades em 4 clusters (pois serão 4 gerentes regionais) chegamos nesse resultado, com centróides gerados em preto. Adicionei também curcunferências com raios de 130 km para dar uma noção melhor da área de deslocamento em cada cluster:
 
 ![Mapa2 - Clusterizado](https://github.com/welder-duarte/Portfolio_DataScience/assets/85957982/246a1a47-4c36-41c0-973c-4e57b6d93e9b)
 
