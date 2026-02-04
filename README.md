@@ -1,7 +1,7 @@
-# Portfólio de Data Science e Análise de Dados
+# Portfólio de Engenharia de Dados, Data Science & Analytics
 
 ## Descrição
-Este repositório contém projetos e estudos relacionados à área de Data Science, englobando análise exploratória de dados, modelos de machine learning, visualização de dados e muito mais. 
+Este repositório contém projetos e estudos relacionados à área de engenharia e ciência de dados/análises, englobando construção de pipelines, APIs, Datalakes, análise exploratória de dados, modelos de machine learning, visualização de dados e muito mais. 
 
 ## Conteúdo
 O repositório é organizado em pastas, separados por temas/áreas e em cada pasta você encontrará:
