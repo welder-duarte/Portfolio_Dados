@@ -1,4 +1,4 @@
-# Portfólio de Data Science e Análise de Dados ***(Em construção)***
+# Portfólio de Data Science e Análise de Dados
 
 ## Descrição
 Este repositório contém projetos e estudos relacionados à área de Data Science, englobando análise exploratória de dados, modelos de machine learning, visualização de dados e muito mais. 
