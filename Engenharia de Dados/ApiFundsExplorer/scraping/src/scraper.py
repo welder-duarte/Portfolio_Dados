@@ -8,7 +8,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
+#from webdriver_manager.chrome import ChromeDriverManager
 from urllib.request import Request, urlopen
 
 
@@ -34,8 +34,13 @@ def init_driver() -> webdriver.Chrome:
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    options.binary_location = "/usr/bin/chromium"
+    service = Service("/usr/bin/chromedriver")
+    driver = webdriver.Chrome(service=service, options=options)
+
+    #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
 
 
@@ -90,7 +95,8 @@ def scrape_funds() -> pd.DataFrame:
     # Abrir seletor de colunas
     select_button = wait.until(EC.element_to_be_clickable((By.ID, "colunas-ranking__select-button")))
     driver.execute_script("arguments[0].scrollIntoView(true);", select_button)
-    select_button.click()
+    driver.execute_script("""document.querySelectorAll('iframe, p, section').forEach(e => e.remove());""")
+    driver.execute_script("arguments[0].click();", select_button)
     time.sleep(3)
 
     # Selecionar todas as colunas
