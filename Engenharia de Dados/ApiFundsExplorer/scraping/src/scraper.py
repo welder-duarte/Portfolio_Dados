@@ -1,4 +1,4 @@
-import argparse, logging, time, warnings, pandas as pd
+import argparse, logging, time, warnings, pandas as pd, os
 from datetime import date, datetime
 
 from bs4 import BeautifulSoup
@@ -8,8 +8,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-#from webdriver_manager.chrome import ChromeDriverManager
+from google.cloud import storage
 from urllib.request import Request, urlopen
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 # Configurações globais
@@ -31,16 +32,20 @@ logging.basicConfig(
 def init_driver() -> webdriver.Chrome:
     options = webdriver.ChromeOptions()
     options.add_argument("--headless=new")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
 
-    options.binary_location = "/usr/bin/chromium"
-    service = Service("/usr/bin/chromedriver")
-    driver = webdriver.Chrome(service=service, options=options)
+    running_in_container = os.getenv("RUNNING_IN_CONTAINER", "false").lower() == "true"
 
-    #driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    if running_in_container:
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.binary_location = os.getenv("CHROME_BIN", "/usr/bin/chromium")
+        service = Service(os.getenv("CHROMEDRIVER_PATH", "/usr/bin/chromedriver"))
+    else:
+        service = Service(ChromeDriverManager().install())
+        
+    driver = webdriver.Chrome(service=service, options=options)
     return driver
 
 
@@ -128,9 +133,36 @@ def save_output(df: pd.DataFrame, output_path: str) -> None:
     df.to_csv(output_path, index=False)
     logging.info(f"Arquivo salvo em {output_path}")
 
+def upload_to_gcs(local_path: str, bucket_name: str, destination_path: str):
+    cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+    if not cred_path or not os.path.isfile(cred_path):
+        raise RuntimeError(
+            "GOOGLE_APPLICATION_CREDENTIALS não configurada corretamente "
+            "ou não aponta para um arquivo JSON válido."
+        )
+
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(destination_path)
+    blob.upload_from_filename(local_path)
+
+    logging.info(f"Upload concluído: gs://{bucket_name}/{destination_path}")
+
+
+
 def main(output_path: str):
     df = scrape_funds()
     save_output(df, output_path)
+
+    upload_to_gcs(
+        local_path=output_path,
+        bucket_name="funds-explorer-raw-apifundsexplorer",
+        destination_path=(
+            f"funds_explorer/"
+            f"scraping_date={date.today()}/funds.csv"
+        )
+    )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Scraping diário do Funds Explorer")

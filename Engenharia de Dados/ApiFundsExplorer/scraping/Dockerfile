@@ -1,5 +1,9 @@
 FROM python:3.11-slim
+
 ENV DEBIAN_FRONTEND=noninteractive
+ENV CHROME_BIN=/usr/bin/chromium
+ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
+
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -39,7 +43,6 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# Instala o Chrome
 # Instala Chrome e Chromedriver compatíveis
 RUN apt-get update && apt-get install -y \
     chromium \
