@@ -1,5 +1,4 @@
-beautifulsoup4
-lxml
-selenium>=4.18.0
 pandas>=2.1.0
 google-cloud-storage>=2.14.0
+python-dotenv
+playwright
